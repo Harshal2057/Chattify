@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 //local imports
 import {dbConnect} from "../backend/config/database.js"
 import authRouter from "./routes/auth.routes.js"
+import cookieParser from "cookie-parser"
 
 
 dotenv.config()
@@ -15,8 +16,10 @@ const PORT = process.env.PORT;
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
 
 
+//ROUTES
 app.use("/api/auth" , authRouter);
 
 app.get("/" , (req , res) => {
