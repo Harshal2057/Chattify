@@ -2,16 +2,18 @@ import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema({
     senderId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
         required:true
     },
 
     receiverId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
         required:true
     },
 
-    message:{
+    text:{
         type:String,
     },
 
@@ -24,4 +26,4 @@ const messageSchema = new mongoose.Schema({
     }
 )
 
-export default mongoose.model("message" , messageSchema);
+export default mongoose.model("Message" , messageSchema);

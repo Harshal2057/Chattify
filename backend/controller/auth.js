@@ -1,6 +1,12 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/generateToken.js";
+import cloudinaryConnect from "../config/cloudinary.js";
+import { v2 as cloudinary } from 'cloudinary';
+import uploadPhoto from "../utils/photoUpload.js";
+
+
+
 
 const signUp = async (req, res) => {
   const saltRounds = 10;
@@ -177,5 +183,53 @@ const checkAuth = async(req ,res) => {
 
 }
 
+const updateProfilePic = async(req , res) => {
 
-export  {signUp , logOut , login , checkAuth};
+  try {
+    
+    const user = req.user;
+
+    if (!user) {
+      return res.status(400).json({
+        success:false,
+        message:"Unauthorized user"
+      })
+    }
+
+    //might change imageFile to profilePic
+    const image = req.files.imageFile;
+
+    if (!image) {
+      return res.status(400).json({
+        success:false,
+        message:"No image file uploaded"
+      })
+    }
+
+    const uploadResponse = await uploadPhoto(image , "Profile_pic")
+   
+      const profilePic = await User.findByIdAndUpdate(user._id , {
+        $set:{
+          profilePic:uploadResponse.secure_url
+        }
+      },
+    {new:true}
+    )
+    
+
+     res.status(200).json({
+          profilePic,
+            success:true,
+            message:"Image uploaded successfully"
+        })
+
+  } catch (error) {
+      return   res.status(400).json({
+            success:false,
+            message: error.message || `Error occured while uploading profilepic => ${error}`
+  })
+}
+}
+
+
+export  {signUp , logOut , login , checkAuth , updateProfilePic};
