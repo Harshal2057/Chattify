@@ -1,3 +1,4 @@
+import { getReceiverSocketId } from "../config/socket.js";
 import User from "../models/User.js"
 import Message from "../models/message.js";
 import uploadPhoto from "../utils/photoUpload.js";
@@ -5,16 +6,13 @@ import uploadPhoto from "../utils/photoUpload.js";
 
 const getAllUsers = async(req , res) => {
     try {
+        console.log("in getAllUsers");
         
         const loggedInUser = req.user._id;
 
         const fillteredUser = await User.find({_id:{$ne:loggedInUser}}).select("-password");
 
-        return res.status(200).json({
-            success:true,
-            message:"User fetched successfully!!",
-            fillteredUser
-        })
+        return res.status(200).json({fillteredUser})
 
     } catch (error) {
         console.log(`Error occured while fetching all the user => ${error}`);
@@ -42,7 +40,8 @@ const getMessages = async(req ,res) => {
 
         return res.status(200).json({
             success:true,
-            message:"Messages fetched from database successfully"
+            message:"Messages fetched from database successfully",
+            getMessages
         })
     } catch (error) {
         console.log(`Error occured while fetching messages from database => ${error}`);
@@ -57,9 +56,9 @@ const getMessages = async(req ,res) => {
 
 const sendMessage = async(req , res) => {
     try {
-        const {text , image} = req.body;
-        const {id : receiverId }= req.params;
-        const senderId = req.user._id;
+        const {text , image} = req.body;//messageData
+        const {id : receiverId }= req.params;//params along with base url
+        const senderId = req.user._id;//from protected route
 
         let imageUrl;
 
@@ -79,6 +78,11 @@ const sendMessage = async(req , res) => {
         })
 
         //todo : realtime functionality using socket.io
+        const receiversocketid = getReceiverSocketId(receiverId);
+
+        if (receiversocketid) {
+            io.to(receiversocketid).emit("newMessage" , newMessage)
+        }
 
     } catch (error) {
         console.log(`Error occured while sending meassage => ${error}`);

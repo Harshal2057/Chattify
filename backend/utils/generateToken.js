@@ -11,9 +11,9 @@ export const generateToken = async(userId , res) => {
    
         const token = await jwt.sign({id:userId} , JWT_SECRET , {expiresIn:"7d"});
 
-        if (token) {
-            console.log(`Token generated successfully => ${token}`); 
-        }
+        // if (token) {
+        //     console.log(`Token generated successfully => ${token}`); 
+        // }
 
        res.cookie("jwt", token , {
         maxAge:7 * 24 * 60 * 60 * 1000,

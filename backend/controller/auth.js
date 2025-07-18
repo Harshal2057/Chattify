@@ -102,11 +102,13 @@ const login = async(req , res) => {
                 message:"No user found  , try signing in"
             })
         }
-
+        
+          
         //3. Verifying password
         const checkPassword = await bcrypt.compare(password , user.password);
 
         if (!checkPassword) {
+          
             return res.status(400).json({
                 success:false,
                 message:"Password doesnt matches !!"
@@ -121,7 +123,7 @@ const login = async(req , res) => {
                 success:true,
                 message:"User logged in successfully !!",
                 user:{
-                    id:user._id,
+                    _id:user._id,
                     name:user.name,
                     email:user.email
                 },

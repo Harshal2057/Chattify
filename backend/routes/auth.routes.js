@@ -7,8 +7,8 @@ const authRouter = express.Router();
 authRouter.post("/signUp" , signUp);
 authRouter.post("/logIn" , login);
 authRouter.post("/logOut", logOut);
-authRouter.post("/checkAuth", protectedRoute , checkAuth);
-authRouter.post("/porfilePic" , protectedRoute , updateProfilePic)
+authRouter.get("/checkAuth", protectedRoute , checkAuth);
+authRouter.put("/porfilePic" , protectedRoute , updateProfilePic)
 
 
 export default authRouter;
