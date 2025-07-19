@@ -9,18 +9,22 @@ import { Toaster } from "react-hot-toast";
 
 //zustand
 import { authStore } from "./store/authStore";
-
+import { chatStore } from "./store/chatStore";
 
 function App() {
 
   const{checkAuth , authUser , onlineUsers} = authStore();
-
+  const {messages,getMessages , selectedUser} = chatStore();
  
   
 
     useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+//   useEffect(() => {
+//    getMessages(selectedUser._id);
+// }, []);
 
   // console.log("Online user =>  " , onlineUsers);
   

@@ -27,11 +27,20 @@ export const chatStore = create((set , get) => ({
     },
 
     getMessages: async(userId) => {
+
+        console.log("getting messages");
+        
+
         set({isLoadingMessage:true})
 
         try {
             const res = await axiosInstace.get(`/messageroutes/getMessages/${userId}`);
-            set({message:res.data})
+            
+            set({messages: res.data.getMessages})
+
+            console.log("messages in getmessage => " , get().messages);
+            
+
         } catch (error) {
                const errorMessage = error.response?.data?.message || "Something went wrong in getMessage";
              toast.error(errorMessage);
@@ -42,11 +51,15 @@ export const chatStore = create((set , get) => ({
 
     sendMessage: async(messageData) => {
 
+        console.log("In send messages");
+        
         const {selectedUser , messages} = get();
 
         try {
             const res = await axiosInstace.post(`/messageroutes/sendMessage/${selectedUser._id}` , messageData);
             set({messages:[...messages , res.data]})
+            
+            
 
         } catch (error) {
                const errorMessage = error.response?.data?.message || "Something went wrong in sendMessage";

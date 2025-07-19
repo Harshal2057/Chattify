@@ -2,11 +2,11 @@ import { getReceiverSocketId } from "../config/socket.js";
 import User from "../models/User.js"
 import Message from "../models/message.js";
 import uploadPhoto from "../utils/photoUpload.js";
+import { io } from "../config/socket.js";
 
 
 const getAllUsers = async(req , res) => {
     try {
-        console.log("in getAllUsers");
         
         const loggedInUser = req.user._id;
 
@@ -28,6 +28,9 @@ const getAllUsers = async(req , res) => {
 const getMessages = async(req ,res) => {
     try {
 
+        console.log("in get messages");
+        
+
         const {id:userToChatId} = req.params;
         const myId = req.user._id;
 
@@ -37,6 +40,11 @@ const getMessages = async(req ,res) => {
                 {senderId:userToChatId , receiverId:myId}
             ]
         })
+
+        // if (getMessages) {
+        //     console.log("messages in backend => " , getMessages);
+            
+        // }
 
         return res.status(200).json({
             success:true,
@@ -56,13 +64,20 @@ const getMessages = async(req ,res) => {
 
 const sendMessage = async(req , res) => {
     try {
-        const {text , image} = req.body;//messageData
+
+        console.log("in send message in backend");
+        
+
+        const {text} = req.body;//messageData
+          const image = req.files?.image; 
         const {id : receiverId }= req.params;//params along with base url
         const senderId = req.user._id;//from protected route
 
         let imageUrl;
 
         if (image) {
+            console.log("Image is present");
+            
             const uploadResponse = await uploadPhoto(image , "messageImage");
 
             if (uploadResponse) {
