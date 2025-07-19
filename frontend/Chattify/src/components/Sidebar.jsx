@@ -54,7 +54,6 @@ const Sidebar = () => {
 
   
 
-
   useEffect(() => {
     getUser()
   }, [getUser , signUp]);
@@ -66,7 +65,6 @@ const Sidebar = () => {
 
     // console.log("ONLINE USER =>" , onlineUsers);
     
-
   return (
     <div className='w-full h-auto mt-5 '>
       <div className='text-4xl m-10'>
@@ -74,19 +72,24 @@ const Sidebar = () => {
       </div>
 
       {/* //UserCard */}
+      <div className="h-[730px] overflow-y-scroll scrollbar-none">
       {
         (filteredUsers || []).map((user, i) => (
           <button key={i}
-          className='w-full h-auto'
+          className='w-full h-auto '
           onClick={() => setSelectedUser(user)}
           >
             <UserCard profile={user.profilePic} userName={user.name} notification={5} status={onlineUsers.includes(user._id) ? "Online" : "Offline"}/>
           </button>
         ))
       }
+      </div>
+
 
     </div>
   )
 }
 
 export default Sidebar
+
+

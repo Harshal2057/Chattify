@@ -35,6 +35,8 @@ const Bottombar = () => {
   const handleSubmitForm = async (e) => {
     e.preventDefault();
 
+    console.log("in handle submit");
+    
     console.log("Form submitted - text:", text, "image:", image);
 
 

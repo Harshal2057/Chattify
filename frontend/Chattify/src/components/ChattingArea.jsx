@@ -1,24 +1,35 @@
 import React from 'react'
 import { chatStore } from '../store/chatStore'
-import { useEffect } from 'react';
+import { useEffect , useRef } from 'react';
 import { authStore } from '../store/authStore';
 import { assets } from '../assets/assets';
 
 const ChattingArea = () => {
 
-  const{messages , getMessages , isLoadingMessage , selectedUser} = chatStore();
+  const{messages , getMessages , isLoadingMessage , selectedUser , subscribeToMessages , unSubscribeToMessages} = chatStore();
   const {authUser} = authStore();
+
+  const messageEndRef = useRef(null)
 
   useEffect(() => {
     getMessages(selectedUser._id);
-  }, [getMessages , selectedUser._id])
+    subscribeToMessages();
 
- 
+    return () => unSubscribeToMessages()
+
+  }, [getMessages , selectedUser._id , subscribeToMessages ,unSubscribeToMessages ])
+
+ useEffect(() => {
+
+  if (messageEndRef.current && messages) {
+      messageEndRef.current.scrollIntoView({behavior:"smooth"})
+  }
+ },[messages])
 
   return (
     <div className='h-[690px] bg-gray-100 rounded-3xl p-3 '>
         
-        <div className='flex-1 overflow-y-auto p-4 space-y-4'>
+        <div className="h-[640px] overflow-y-scroll scrollbar-none">
           { Array.isArray(messages) && messages.map((message , i) => {
             return(
               <div key={i}
@@ -37,6 +48,7 @@ const ChattingArea = () => {
                         {message.images && (
                           <img src={message.images} alt='attachment'
                           className='size-40 rounded-md mb-2'
+                          ref={messageEndRef}
                           />
                         )}
                         {message.text && <p>{message.text}</p>}

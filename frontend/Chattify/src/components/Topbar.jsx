@@ -9,8 +9,8 @@ const Topbar = () => {
   const {authUser , onlineUsers} = authStore();
   const {selectedUser} = chatStore();
 
-  console.log("the authuser => " , authUser);
-  console.log("the selected user => " , selectedUser);
+  // console.log("the authuser => " , authUser);
+  // console.log("the selected user => " , selectedUser);
   // console.log("onlineUsers =>", onlineUsers);
 
   const[status , setStatus] = useState("");

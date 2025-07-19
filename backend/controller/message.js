@@ -99,6 +99,11 @@ const sendMessage = async(req , res) => {
             io.to(receiversocketid).emit("newMessage" , newMessage)
         }
 
+          return res.status(200).json({
+            success:true,
+            message:"Success from Send Message",
+            newMessage
+        })
     } catch (error) {
         console.log(`Error occured while sending meassage => ${error}`);
 

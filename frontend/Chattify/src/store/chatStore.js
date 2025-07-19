@@ -5,85 +5,86 @@ import { authStore } from "./authStore";
 import message from "../../../../backend/models/message";
 
 
-export const chatStore = create((set , get) => ({
+export const chatStore = create((set, get) => ({
     users: [],
-    messages:[],
+    messages: [],
     selectedUser: null,
     isLoadingUser: false,
-    isLoadingMessage:false,
+    isLoadingMessage: false,
 
-    getUser: async() => {
-        set({isLoadingUser:true});
+    getUser: async () => {
+        set({ isLoadingUser: true });
 
         try {
             const res = await axiosInstace.get("/messageroutes/getUsers");
-            set({users:res.data})
+            set({ users: res.data })
         } catch (error) {
-              const errorMessage = error.response?.data?.message || "Something went wrong in getUser";
-             toast.error(errorMessage);
-        }finally{
-            set({isLoadingUser:false})
+            const errorMessage = error.response?.data?.message || "Something went wrong in getUser";
+            toast.error(errorMessage);
+        } finally {
+            set({ isLoadingUser: false })
         }
     },
 
-    getMessages: async(userId) => {
+    getMessages: async (userId) => {
 
-        console.log("getting messages");
-        
-
-        set({isLoadingMessage:true})
+        set({ isLoadingMessage: true })
 
         try {
             const res = await axiosInstace.get(`/messageroutes/getMessages/${userId}`);
-            
-            set({messages: res.data.getMessages})
 
-            console.log("messages in getmessage => " , get().messages);
-            
+            set({ messages: res.data.getMessages })
 
         } catch (error) {
-               const errorMessage = error.response?.data?.message || "Something went wrong in getMessage";
-             toast.error(errorMessage);
-        }finally{
-          set({isLoadingMessage:false})
+            const errorMessage = error.response?.data?.message || "Something went wrong in getMessage";
+            toast.error(errorMessage);
+        } finally {
+            set({ isLoadingMessage: false })
         }
     },
 
-    sendMessage: async(messageData) => {
+    sendMessage: async (messageData) => {
 
-        console.log("In send messages");
-        
-        const {selectedUser , messages} = get();
+        console.log("IN send Message");
+
+
+        const { selectedUser, messages } = get();
 
         try {
-            const res = await axiosInstace.post(`/messageroutes/sendMessage/${selectedUser._id}` , messageData);
-            set({messages:[...messages , res.data]})
-            
-            
+            const res = await axiosInstace.post(`/messageroutes/sendMessage/${selectedUser._id}`, messageData);
+            console.log("From Send Message", res.data);
+
+            set({ messages: [...messages, res.data.newMessage] })
 
         } catch (error) {
-               const errorMessage = error.response?.data?.message || "Something went wrong in sendMessage";
-             toast.error(errorMessage);
+            const errorMessage = error.response?.data?.message || "Something went wrong in sendMessage";
+            toast.error(errorMessage);
         }
     },
 
-    subscribeToMessages: async() => {
+    subscribeToMessages: async () => {
 
-        const {selectedUser} = get();
+        const { selectedUser } = get();
 
         if (!selectedUser) {
             return;
         }
 
+
         const socket = authStore.getState().socket;
 
-        socket.on("newMessage" , (newMessage) => {
-                set({messages:[...get().messages , newMessage]})
+        socket.on("newMessage", (newMessage) => {
+
+
+            const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
+            if (!isMessageSentFromSelectedUser) return;
+
+            set({ messages: [...get().messages, newMessage] })
         })
 
     },
 
-    unSubscribeToMessages: async() => {
+    unSubscribeToMessages: async () => {
         const socket = authStore.getState().socket;
         socket.off("newMessage")
     },
