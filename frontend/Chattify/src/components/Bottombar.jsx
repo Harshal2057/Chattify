@@ -93,13 +93,13 @@ const Bottombar = () => {
           <div
             onClick={() => fileInputRef.current.click()}
             className='p-1 border-4 border-violet-300 rounded-full hover:scale-105'>
-            <img src={assets.pin} className='size-14' />
+            <img src={assets.pin} className='size-10' />
           </div>
 
           <input ref={fileInputRef} onChange={handlePinChange} type="file" name="image" accept='image/*' className='hidden' />
 
           <button type='submit' className='p-2 px-2 border-4 border-violet-300 rounded-full hover:scale-105'>
-            <img src={assets.send} className='size-12' />
+            <img src={assets.send} className='size-9' />
           </button>
         </div>
       </form>

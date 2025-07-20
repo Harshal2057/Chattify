@@ -27,9 +27,9 @@ const ChattingArea = () => {
  },[messages])
 
   return (
-    <div className='h-[690px] bg-gray-100 rounded-3xl p-3 '>
+    <div className='h-full bg-gray-100 rounded-3xl p-3 '>
         
-        <div className="h-[640px] overflow-y-scroll scrollbar-none">
+        <div className="h-full overflow-y-scroll scrollbar-none">
           { Array.isArray(messages) && messages.map((message , i) => {
             return(
               <div key={i}

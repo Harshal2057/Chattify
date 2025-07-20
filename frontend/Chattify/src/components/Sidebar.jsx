@@ -66,13 +66,13 @@ const Sidebar = () => {
     // console.log("ONLINE USER =>" , onlineUsers);
     
   return (
-    <div className='w-full h-auto mt-5 '>
+    <div className='w-full h-full mt-5 flex flex-col '>
       <div className='text-4xl m-10'>
         <p className='font-Outfit'>Chats</p>
       </div>
 
       {/* //UserCard */}
-      <div className="h-[730px] overflow-y-scroll scrollbar-none">
+      <div className="flex-1 overflow-y-auto scrollbar-none">
       {
         (filteredUsers || []).map((user, i) => (
           <button key={i}

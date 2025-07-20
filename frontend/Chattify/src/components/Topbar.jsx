@@ -24,7 +24,7 @@ const Topbar = () => {
   }, [onlineUsers, selectedUser]); 
 
   return (
-    <div className='h-1/12 bg-gray-100 flex items-center p-3 rounded-3xl '>
+    <div className='h-1/12 bg-gray-100 flex items-center p-3 rounded-2xl '>
         <div className='flex items-center gap-10'>
 
           {/* pofile */}
